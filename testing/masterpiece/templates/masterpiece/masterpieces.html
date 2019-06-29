@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>걸작</title>
+</head>
+<body>
+  {% if form %}
+    <form action="" method="POST">
+      {% csrf_token %}
+      {{ form.name }}
+      {{ form.author }}
+      {{ form.price }}
+      <input type="submit">
+    </form>
+  {% endif %}
+
+  {% if objects_list %}
+    {% for obj in object_list %}
+      {{ obj.name }}
+    {% endfor %}
+  {% endif %}
+</body>
+</html>
