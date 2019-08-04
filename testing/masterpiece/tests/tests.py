@@ -1,23 +1,13 @@
-import pytest
 from django.shortcuts import reverse
-from .models import Masterpiece
-from .forms import MasterpieceModelForm
+from masterpiece.models import Masterpiece
+from masterpiece.forms import MasterpieceModelForm
 
 
-@pytest.mark.django_db
-def test_masterpiece_listview():
-    obj = Masterpiece.objects.create(
-        name='Creation of Adam',
-        author='Michelangelo',
-        price='100.99'
-    )
-    assert obj
-
-
-def test_listview_get_test(client):
+def test_listview_get_test(client, access_db, create_obj):
     resp = client.get(
         reverse('list')
     )
+    assert resp.context_data['object_list'][0].name == 'Creation of Adam'
     assert resp.status_code == 200
 
 
@@ -38,8 +28,7 @@ def test_createview_get_test(client):
     assert isinstance(resp.context_data.get('form'), MasterpieceModelForm)
 
 
-@pytest.mark.django_db
-def test_createview_post_test(client):
+def test_createview_post_test(client, access_db):
     resp = client.post(
         reverse('create'),
         data={'name': 'Creation of Adam', 'author': 'Michelangelo', 'price': '100.99'}
