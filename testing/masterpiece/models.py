@@ -14,3 +14,10 @@ class Masterpiece(models.Model):
 
     def get_absolute_url(self):
         return reverse('list')
+
+class Buyer(models.Model):
+    name = models.CharField(max_length=50)
+    position = models.CharField(max_length=50)
+    nationality = models.CharField(max_length=30)
+    property = models.CharField(max_length=30)
+    gender = models.CharField(max_length=5, null=True)

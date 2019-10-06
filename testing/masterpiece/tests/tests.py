@@ -1,3 +1,4 @@
+import pytest
 from django.shortcuts import reverse
 from masterpiece.models import Masterpiece
 from masterpiece.forms import MasterpieceModelForm
@@ -37,3 +38,15 @@ def test_createview_post_test(client, access_db):
     obj = Masterpiece.objects.first()
     assert isinstance(obj, Masterpiece)
     assert resp.url == reverse('list')
+
+
+@pytest.mark.parametrize(
+    'api_resp,result', [('{"data":[["jade","Satou","Accountant","Tokyo","28th Nov 08","$162,700"]]}','jadeSatou'),('{"data":[["jozz","Satou","Accountant","Tokyo","28th Nov 08","$162,700"]]}','jozzSatou')]
+)
+def test_buyer_list_view(api_resp, result, client, access_db, requests_mock):
+    requests_mock.get('https://bit.ly/2nkSGF1', text=api_resp)
+    resp = client.get(
+        reverse('buyer-list')
+    )
+    assert resp.status_code == 200
+    assert resp.context_data['object_list'][0].name == result
